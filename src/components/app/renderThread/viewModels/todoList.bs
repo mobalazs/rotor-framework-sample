@@ -18,7 +18,6 @@ namespace ViewModels
                     props.counter = state.counter
                 end sub
 
-                ' callback: m.onUpdateView ' will be called as default
             })
 
         end sub
