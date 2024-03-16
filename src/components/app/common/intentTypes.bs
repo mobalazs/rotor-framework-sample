@@ -1,0 +1,8 @@
+namespace IntentType
+
+    enum TODO_LIST
+        ADD_TODO = "todo_lsit_add_todo"
+        REMOVE_LAST = "todo_lsit_remove_last"
+    end enum
+
+end namespace

@@ -1,0 +1,83 @@
+
+' Framework
+import "pkg:/source/rotorFramework/RotorFramework.bs"
+
+' Import assets
+import "pkg:/assets/data/theme.brs"
+import "pkg:/assets/data/translation.brs"
+
+' constants
+import "pkg:/components/app/common/intentTypes.bs"
+
+' Import ViewModels
+import "../viewModels/addTodoButton.bs"
+import "../viewModels/todoList.bs"
+
+
+
+sub init()
+    m.roDeviceInfo = CreateObject("roDeviceInfo")
+end sub
+
+
+sub initApplication(payload as object)
+
+    ' (1) Initialize Rotor Framework
+    m.appFw = new Rotor.Framework({
+        tasks: ["AppTask"],
+        debug: {
+            autoSetNodeId: true ' If true, you can find nodes in RALE much easier. (Available only in debug mode.)
+        }
+    })
+
+    ' (2) Pluginize your ViewBuilder
+    m.appFw.registerPlugins([
+        new Rotor.FieldsPlugin("fields") ' Plugin key is passed as first argument. FiledsPlugin can be invoked by keyword "filed".
+        new Rotor.FocusPlugin("focus")
+        new Rotor.DispatcherProviderPlugin("dispatcher")
+    ])
+
+    ' (2) Render your entry point
+
+    m.appFw.render({
+        sgName: "LayoutGroup",
+        fields: {
+            translation: [90, 60],
+            itemSpacings: [60]
+        },
+        children: [
+            {
+                sgName: "Label",
+                fields: {
+                    text: "Simple TodoList Example (driven by Rotor Framewrok)",
+                    font: "font:LargeSystemFont"
+                }
+            },
+            {
+                id: "todoList",
+                viewModel: ViewModels.TodoList
+            }
+        ]
+    })
+
+end sub
+
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    if press = true
+
+        result = m.appFw.plugins.focus.onKeyEventHandler(key, press)
+
+        if result.handled
+            return result.handled
+
+        else if key = "back"
+            todoListDispatcher = m.appFw.getDispatcher("todoList")
+            todoListDispatcher.dispatch({
+                type: IntentType.TODO_LIST.REMOVE_LAST
+            })
+            return true
+        end if
+    end if
+    return false
+end function

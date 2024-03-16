@@ -1,0 +1,100 @@
+
+namespace ViewModels
+
+    class AddTodoButton extends ViewModel
+
+        override function template() as object
+
+            ' Please use your own Theme System or Rotor's Theme System. Below approach dummy.
+            colors = {
+                background: "0x1D2C50FF",
+                background_2: "0x0A1323FF",
+                primary: "0x273469FF",
+                primary_2: "0x3F51B5FF",
+                secondary: "0x7E8AA1FF",
+                secondary_2: "0xFFFFFFFF",
+                error: "0xB00020FF",
+                black: "0x000000FF",
+                white: "0xFFFFFFFF"
+            }
+            theme = {
+                width: 300,
+                height: 60,
+                padding: 10,
+                posterUrl: "pkg:/assets/images/rounded_rectangle.9.png",
+                textColor: colors.secondary_2,
+                bgColor: colors.primary,
+                textColor_focused: colors.primary,
+                bgColor_focused: colors.secondary_2
+
+            }
+
+            return {
+                sgName: "Group",
+                context: {
+                    theme: theme
+                },
+                dispatcher: "todoList",
+                focus: {
+                    isEnabled: true,
+                    onFocusChanged: sub (widget, isFocused as boolean)
+
+                        theme = widget.context.theme
+                        bg = widget.getWidget("buttonBg")
+                        label = widget.getWidget("buttonBg/buttonLabel")
+
+                        if isFocused
+                            bg.node.blendColor = theme.bgColor_focused
+                            label.node.color = theme.textColor_focused
+                        else
+                            bg.node.blendColor = theme.bgColor
+                            label.node.color = theme.textColor
+                        end if
+
+                    end sub,
+
+                    onSelected: sub(widget)
+                        widget.context.dispatcher.todoList.dispatch({
+                            type: IntentType.TODO_LIST.ADD_TODO,
+                            payload: {
+                                description: m.props.description
+                            }
+                        })
+                    end sub
+
+                },
+                children: {
+                    id: "buttonBg",
+                    sgName: "Poster",
+                    fields: {
+                        blendColor: "@context.theme.bgColor",
+                        width: theme.width,
+                        height: "@context.theme.height",
+                        uri: "@context.theme.posterUrl"
+                    },
+                    children: {
+                        id: "buttonLabel",
+                        sgName: "Label",
+                        fields: {
+                            text: m.props.description,
+                            color: "@context.theme.textColor",
+                            horizAlign: "left",
+                            vertAlign: "center",
+                            width: function(widget)
+                                return widget.context.theme.width - 2 * widget.context.theme.padding
+                            end function,
+                            height: function(widget)
+                                return widget.context.theme.height - 2 * widget.context.theme.padding
+                            end function,
+                            translation: function(widget)
+                                return [widget.context.theme.padding, widget.context.theme.padding]
+                            end function
+                        }
+                    }
+                }
+            }
+        end function
+
+    end class
+
+end namespace

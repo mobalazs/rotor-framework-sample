@@ -1,0 +1,24 @@
+' Rotor Framework Task
+import "pkg:/source/rotorFramework/RotorFrameworkTask.bs"
+
+' Import common contants
+import "pkg:/components/app/common/intentTypes.bs"
+
+' Import Models and Reducers
+import "appLogic/todoListModel.bs"
+import "appLogic/todoListReducer.bs"
+
+sub init()
+    m.top.functionName = "task"
+    m.appFw = new Rotor.FrameworkTask()
+end sub
+
+sub task()
+
+    todoListModel = new Models.TodoListModel()
+    todoListReducer = new Reducers.TodoListReducer(todoListModel)
+    m.todoListDispatcher = new Dispatcher("todoList", todoListReducer)
+
+    m.appFw.sync() ' MVI synchronization
+
+end sub

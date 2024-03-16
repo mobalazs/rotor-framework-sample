@@ -1,0 +1,13 @@
+namespace Models
+
+    class TodoListModel extends Model
+
+        state = {
+            limit: 15,
+            counter: 0,
+            list: []
+        }
+
+    end class
+
+end namespace

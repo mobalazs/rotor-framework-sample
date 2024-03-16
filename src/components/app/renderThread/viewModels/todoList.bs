@@ -1,0 +1,153 @@
+
+namespace ViewModels
+
+    class TodoList extends ViewModel
+
+
+        ' ViewModel lifecycle hooks
+
+        override sub onCreateView()
+
+            m.props.list = []
+
+            m.todoListDispatcher = m.getDispatcher("todoList")
+            m.todoListDispatcher.addListener({
+
+                mapStateToProps: sub(props, state)
+                    props.list = state.list
+                    props.counter = state.counter
+                end sub
+
+                ' callback: m.onUpdateView ' will be called as default
+            })
+
+        end sub
+
+        override sub afterViewMounted()
+            ' set initial focus (This should happen once in this app session)
+            m.plugins.focus.setFocus()
+        end sub
+
+        override sub onUpdateView()
+            m.updateView()
+        end sub
+
+        override sub onDestroyView()
+            m.myList = invalid
+            m.todoListDispatcher.destroy()
+        end sub
+
+        ' ViewModel template
+
+        override function template() as object
+
+            return {
+                sgName: "Group",
+                focus: {
+                    group: {
+                        defaultFocusId: "first-button"
+                    }
+                },
+                children: [
+                    {
+                        sgName: "LayoutGroup",
+                        fields: {
+                            itemSpacings: [15, 5, 5, 5, 5, 30]
+                        },
+                        children: [
+                            {
+                                sgName: "Label",
+                                fields: { text: "Select from todos:" }
+                            },
+                            {
+                                id: "first-button",
+                                viewModel: ViewModels.AddTodoButton,
+                                props: { description: "Work" }
+                            }, {
+                                viewModel: ViewModels.AddTodoButton,
+                                props: { description: "Play" }
+                            }, {
+                                viewModel: ViewModels.AddTodoButton,
+                                props: { description: "Wash dishes" }
+                            }, {
+                                viewModel: ViewModels.AddTodoButton,
+                                props: { description: "Buy food" }
+                            }, {
+                                viewModel: ViewModels.AddTodoButton,
+                                props: { description: "Sport" }
+                            },{
+                                sgName: "Label",
+                                fields: {
+                                    wrap: true,
+                                    width: 300,
+                                    numLines: 2,
+                                    text: `User RC "back" \nto remove last item.`,
+                                    font: "font:SmallestSystemFont"
+                                }
+                            },
+                        ]
+                    },
+                    {
+                        sgName: "Rectangle",
+                        fields: {
+                            color: "0xAAAA77FF",
+                            translation: [400, 0],
+                            width: 300,
+                            height: 610
+                        },
+                        children: [{
+                            id: "myList",
+                            sgName: "LayoutGroup",
+                            fields: {
+                                itemSpacings: [5]
+                            }
+                        }]
+                    }
+                ]
+            }
+
+        end function
+
+
+
+        ' Custom ViewModel method
+
+        sub updateView()
+
+            myList = m.getWidget("myList")
+
+            if m.props.counter > 0
+                lastIndex = m.props.counter - 1
+                doesLastExist = m.getWidget(`myTodo-${lastIndex}`)
+                if doesLastExist = invalid
+
+                    myList.render({
+                        children: {
+                            id: `myTodo-${lastIndex}`,
+                            sgName: "Label",
+                            fields: {
+                                text: m.props.list[lastIndex],
+                                color: "0x000000FF",
+                                translation: [5, 0]
+                            }
+                        }
+                    })
+
+                end if
+            end if
+
+            ' Should remove checker
+            shouldRemoveLastId = `myTodo-${m.props.counter}`
+            shouldRemoveLast = m.getWidget(shouldRemoveLastId)
+            if shouldRemoveLast <> invalid
+                myList.erase(shouldRemoveLastId)
+            end if
+
+
+
+        end sub
+
+
+    end class
+
+end namespace

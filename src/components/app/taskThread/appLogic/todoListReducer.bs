@@ -1,0 +1,54 @@
+namespace Reducers
+
+    class TodoListReducer extends Reducer
+
+        sub new(modelInstance)
+            super(modelInstance)
+            m.init()
+        end sub
+
+        sub init()
+
+            m.applyMidleware([
+
+                ' Logger middleware
+                function(intent, state) as Intent
+                    print `[INFO TODO_LIST REDUCER] intent:${intent.type}, counter:${state.counter}, limit:${state.limit}`
+                    return intent ' NEXT
+                end function,
+
+                ' handle business logic exceptions
+                function(intent, state) as Intent
+
+                    preventUpdateGTlimit = intent.type = IntentType.TODO_LIST.ADD_TODO and state.counter + 1 > state.limit
+                    preventUpdateLTzero = intent.type = IntentType.TODO_LIST.REMOVE_LAST and state.counter - 1 < 0
+
+                    if preventUpdateGTlimit or preventUpdateLTzero
+                        return invalid ' Precent state update
+                    else
+                        return intent ' NEXT
+                    end if
+
+                end function,
+            ])
+
+        end sub
+
+        override function reducer(state as Object, intent as Intent)
+
+            if intent.type = IntentType.TODO_LIST.ADD_TODO
+                newItem = intent.payload.description
+                state.list.push(newItem)
+                state.counter++
+
+            else if intent.type = IntentType.TODO_LIST.REMOVE_LAST
+                state.list.pop()
+                state.counter--
+            end if
+
+            return state
+        end function
+
+    end class
+
+end namespace
