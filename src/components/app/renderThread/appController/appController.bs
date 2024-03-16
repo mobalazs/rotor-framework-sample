@@ -32,7 +32,7 @@ sub initApplication(payload as object)
 
     ' (2) Pluginize your ViewBuilder
     m.appFw.registerPlugins([
-        new Rotor.FieldsPlugin("fields") ' Plugin key is passed as first argument. FiledsPlugin can be invoked by keyword "filed".
+        new Rotor.FieldsPlugin("fields") ' Plugin key is passed as first argument. FiledsPlugin can be invoked by keyword "fileds".
         new Rotor.FocusPlugin("focus")
         new Rotor.DispatcherProviderPlugin("dispatcher")
     ])
