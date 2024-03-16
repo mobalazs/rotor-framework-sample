@@ -13,7 +13,7 @@ Implemented and running in task-thread
 
 ### Plugins
 
-Coming soon...
+Detailed guides are coming about:
 * How to use existing plugins (doc per plugin)
 * How to write new plugins
 
@@ -33,8 +33,8 @@ Focus plugin is very complex but implements innovations which make it easy to us
 - **Spatial navigation** within focus group (focusables do not need to be children of group, just descendant) 
     - distance measuring is based on point-to-segment calculations 
     - detecting rotated segments
-- **Focus bubbling** (alongside ancestors) by direction
-- **Focus capturing** (alongside descendants)
+- **Focus bubbling** (along ancestors) by direction
+- **Focus capturing** (along descendants)
 - Relation between focusables and groups are calculated in runtime
 - No need to specify additional id dor groups od focusables, they are using the widget's readable id.
 

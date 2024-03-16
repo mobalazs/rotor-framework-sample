@@ -49,7 +49,7 @@ sub initApplication(payload as object)
             {
                 sgName: "Label",
                 fields: {
-                    text: "Simple TodoList Example (driven by Rotor Framewrok)",
+                    text: "Simple TodoList Example (driven by Rotor Framework)",
                     font: "font:LargeSystemFont"
                 }
             },
