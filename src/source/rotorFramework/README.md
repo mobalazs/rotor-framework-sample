@@ -9,7 +9,7 @@ Implemented and running in task-thread
 
 ## View Builder
 
-![View Builder concept](docs/images/Rotor_Framework_ViewBuilder.jpeg)
+![View Builder](docs/images/Rotor_Framework_ViewBuilder.jpeg)
 
 ### Plugins
 
@@ -52,7 +52,7 @@ Note that you can use your own strategy such as a bs file based asset system. At
 
 ## Multi-thread MVI
 
-![View Builder concept](docs/images/Rotor_Framework_multi-thread_MVI.jpeg)
+![multi-thread MVI](docs/images/Rotor_Framework_multi-thread_MVI.jpeg)
 
 #### Thread rendezvous
 
