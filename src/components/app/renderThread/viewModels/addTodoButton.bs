@@ -5,7 +5,7 @@ namespace ViewModels
 
         override function template() as object
 
-            ' Please use your own Theme System or Rotor's Theme System. Below approach dummy.
+            ' Please use your own design System or Rotor's design System. Below approach dummy.
             colors = {
                 background: "0x1D2C50FF",
                 background_2: "0x0A1323FF",
